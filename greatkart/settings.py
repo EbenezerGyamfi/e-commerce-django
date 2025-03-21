@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 from pathlib import Path
 
-from django.conf.global_settings import STATIC_ROOT, STATICFILES_DIRS
+from django.conf.global_settings import AUTH_USER_MODEL, STATIC_ROOT, STATICFILES_DIRS
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'category'
+    'category',
+    'accounts'
 ]
 
 MIDDLEWARE = [
@@ -71,6 +72,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'greatkart.wsgi.application'
+
+AUTH_USER_MODEL = 'accounts.Account'
 
 
 # Database
