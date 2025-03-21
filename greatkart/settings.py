@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'category',
-    'accounts'
+    'accounts',
+    'store'
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,7 @@ STATICFILES_DIRS=[
 ]
 
 #run python3 manage.py collectstatic. for the project to have access to static files
+
+#media files config
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
