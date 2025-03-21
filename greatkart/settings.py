@@ -12,8 +12,11 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 import os
 from pathlib import Path
+from pickle import TRUE
 
 from django.conf.global_settings import AUTH_USER_MODEL, STATIC_ROOT, STATICFILES_DIRS
+
+import environ
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -27,6 +30,8 @@ SECRET_KEY = 'inug5y0pzt#+hu5yhu*a%0sk!f@m-_bef5=s=+9(%7r^+fop7@'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+
 
 ALLOWED_HOSTS = []
 
@@ -42,7 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'category',
     'accounts',
-    'store'
+    'store',
+    'debug_toolbar'
 ]
 
 MIDDLEWARE = [
@@ -53,6 +59,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware"
+    
 ]
 
 ROOT_URLCONF = 'greatkart.urls'
@@ -136,3 +144,29 @@ STATICFILES_DIRS=[
 #media files config
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+  # <-- Updated!
+
+env = environ.Env(  # <-- Updated!
+    # set casting, default value
+    DEBUG=(bool, True),
+)
+
+# settings.py
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+             "LOCATION": env.str("REDIS_URL", "redis://localhost:6379/"),
+        "KEY_PREFIX": "imdb",
+        "TIMEOUT": 60 * 15,  # in seconds: 60 * 15 (15 minutes)
+    }
+}
+
+
+if DEBUG:
+    INTERNAL_IPS = ["127.0.0.1"] 
+    
+DEBUG_TOOLBAR_PANELS = [
+    'debug_toolbar.panels.cache.CachePanel',
+    # other panels
+]

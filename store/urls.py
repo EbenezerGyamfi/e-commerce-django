@@ -7,5 +7,6 @@ from store import views
 
 urlpatterns = [
     path('', views.store, name='store'),
+   
     
 ]
