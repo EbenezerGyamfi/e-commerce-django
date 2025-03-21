@@ -3,7 +3,6 @@ from django.contrib.admin.templatetags.admin_modify import prepopulated_fields_j
 
 from store.models import Product
 
-# Register your models here.
 
 class ProductAdmin(admin.ModelAdmin):
     list_display = ('product_name', 'price', 'stock', 'category', 'created_date', 'is_available')
