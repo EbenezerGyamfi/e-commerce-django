@@ -76,6 +76,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'category.context_processor.menu_links',
             ],
         },
     },
@@ -170,3 +171,5 @@ DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.cache.CachePanel',
     # other panels
 ]
+#configure your default runner to custom runner
+# TEST_RUNNER = "store.tests.test_runner.ExampleTestRunner"
