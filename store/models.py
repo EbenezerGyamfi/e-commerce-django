@@ -1,5 +1,6 @@
 from django.core.cache import cache
 from django.db import models
+from django.urls import reverse
 from category.models import Category
 
 # Create your models here.
@@ -28,6 +29,9 @@ class Product(models.Model):
             cache.set(cache_key, products, 60 * 60)  # Cache for 1 hour
 
         return products
+    
+    def get_url(self):
+        return reverse('product_details',args=[self.category.slug,self.slug])
         
     def __str__(self):
         return self.product_name

@@ -154,14 +154,14 @@ env = environ.Env(  # <-- Updated!
 )
 
 # settings.py
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-             "LOCATION": env.str("REDIS_URL", "redis://localhost:6379/"),
-        "KEY_PREFIX": "imdb",
-        "TIMEOUT": 60 * 15,  # in seconds: 60 * 15 (15 minutes)
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
+#              "LOCATION": env.str("REDIS_URL", "redis://localhost:6379/"),
+#         "KEY_PREFIX": "imdb",
+#         "TIMEOUT": 60 * 15,  # in seconds: 60 * 15 (15 minutes)
+#     }
+# }
 
 
 if DEBUG:
