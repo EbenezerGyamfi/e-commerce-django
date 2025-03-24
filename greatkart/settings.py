@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'category',
     'accounts',
     'store',
-    'debug_toolbar'
+    'debug_toolbar',
+    'Cart',
 ]
 
 MIDDLEWARE = [
@@ -68,7 +69,11 @@ ROOT_URLCONF = 'greatkart.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates', os.path.join(BASE_DIR, 'store')],
+         'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'store'),
+            os.path.join(BASE_DIR, 'Cart'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,6 +82,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'category.context_processor.menu_links',
+                'Cart.context_processor.counter',
             ],
         },
     },
@@ -154,14 +160,14 @@ env = environ.Env(  # <-- Updated!
 )
 
 # settings.py
-# CACHES = {
-#     "default": {
-#         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-#              "LOCATION": env.str("REDIS_URL", "redis://localhost:6379/"),
-#         "KEY_PREFIX": "imdb",
-#         "TIMEOUT": 60 * 15,  # in seconds: 60 * 15 (15 minutes)
-#     }
-# }
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.redis.RedisCache",
+             "LOCATION": env.str("REDIS_URL", "redis://localhost:6379/"),
+        "KEY_PREFIX": "imdb",
+        "TIMEOUT": 60 * 15,  # in seconds: 60 * 15 (15 minutes)
+    }
+}
 
 
 if DEBUG:
