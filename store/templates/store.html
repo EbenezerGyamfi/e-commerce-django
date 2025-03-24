@@ -1,7 +1,12 @@
 {% extends "base.html" %} {% load static %} {% block content %}
 <section class="section-pagetop bg">
   <div class="container">
+    {% if 'search' in request.path %}
+    <h2 class="title-page">Search Result</h2>
+    {% else %}
     <h2 class="title-page">Our Store</h2>
+    
+    {% endif %}
   </div>
   <!-- container //  -->
 </section>
@@ -15,7 +20,7 @@
       <main class="col-md-9">
         <header class="border-bottom mb-4 pb-3">
           <div class="form-inline">
-            <span class="mr-md-auto">32 Items found </span>
+            <span class="mr-md-auto">{{product_count}} Items found </span>
           </div>
         </header>
         <!-- sect-heading -->
@@ -85,16 +90,14 @@
                 >{{page_number}}</a
               >
             </li>
-            {% endif %} {% endfor %} 
-            
-            {% if products.has_next %}
-              <li class="page-item"><a class="page-link" href="?page={{products.next_page_number}}">Next</a></li>
+            {% endif %} {% endfor %} {% if products.has_next %}
+            <li class="page-item">
+              <a class="page-link" href="?page={{products.next_page_number}}"
+                >Next</a
+              >
+            </li>
             {% else %}
-            <a
-              class="page-link disabled"
-              href="#"
-              >Next</a
-            >
+            <a class="page-link disabled" href="#">Next</a>
             {% endif %}
           </ul>
           {% endif %}
