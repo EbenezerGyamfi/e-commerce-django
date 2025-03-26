@@ -1,3 +1,4 @@
+
 from itertools import product
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
@@ -35,39 +36,21 @@ def add_cart(request, product_id):
             cart_id = cart_id(request)
         )
     cart.save()
-    
-    is_cart_item_exists = CartItem.objects.filter(product=product, cart=cart).exists()
-            
-    if is_cart_item_exists:
-        cart_item = CartItem.objects.filter(product=product, cart=cart)
-        existing_variation_list = []
-        id = []
-        for item in cart_item:
-            existing_variation = item.variations.all()
-            existing_variation_list.append(list(existing_variation))
-            id.append(item.id)
-            
-        if products_variation in existing_variation_list:
-            index = existing_variation_list.index(products_variation)
-            item_id = id[index]
-            item = CartItem.objects.get(product=product, id=item_id)
-            item.quantity += 1
-            item.save()
-        else:
-            
-            if(len(products_variation) > 0):
-                cart_item.variations.clear()
-                for item in products_variation:
-                    cart_item.variations.add(item)
-            cart_item.save()
-    else:
+        
+    try:
+        cart_item = CartItem.objects.get(product=product, cart=cart)
+        if(len(products_variation) > 0):
+            for item in products_variation:
+                cart_item.variations.add(item)
+        cart_item.quantity += 1
+        cart_item.save()
+    except CartItem.DoesNotExist:
         cart_item = CartItem.objects.create(
             product = product,
             quantity = 1,
             cart = cart
         )
         if(len(products_variation) > 0):
-            
             for item in products_variation:
                 cart_item.variations.add(item)
         cart_item.save()
