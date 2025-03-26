@@ -25,7 +25,12 @@
 						<div class="aside"><img src="{{cart_item.product.images.url}}" class="img-sm"></div>
 						<figcaption class="info">
 							<a href="#" class="title text-dark">{{cart_item.product.product_name}}</a>
-							<p class="small text-muted">Color: CUH-ZCT2E  <br> Price: Sony</p>
+							<p class="small text-muted">
+                {% if cart_item.variations.all %}
+                  {% for item in cart_item.variations.all  %}
+                    {{item.variation_category | capfirst}} : {{item.variation_value | capfirst}} <br>
+                  {% endfor %}
+                {% endif %}
 						</figcaption>
 					</figure>
 				</td>
