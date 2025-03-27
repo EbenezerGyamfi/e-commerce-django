@@ -48,7 +48,6 @@ INSTALLED_APPS = [
     'category',
     'accounts',
     'store',
-    'debug_toolbar',
     'Cart',
 ]
 
@@ -60,7 +59,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "debug_toolbar.middleware.DebugToolbarMiddleware"
     
 ]
 
@@ -159,23 +157,10 @@ env = environ.Env(  # <-- Updated!
     DEBUG=(bool, True),
 )
 
-# settings.py
-CACHES = {
-    "default": {
-        "BACKEND": "django.core.cache.backends.redis.RedisCache",
-             "LOCATION": env.str("REDIS_URL", "redis://localhost:6379/"),
-        "KEY_PREFIX": "imdb",
-        "TIMEOUT": 60 * 15,  # in seconds: 60 * 15 (15 minutes)
-    }
-}
 
 
 if DEBUG:
     INTERNAL_IPS = ["127.0.0.1"] 
-    
-DEBUG_TOOLBAR_PANELS = [
-    'debug_toolbar.panels.cache.CachePanel',
-    # other panels
-]
+
 #configure your default runner to custom runner
 # TEST_RUNNER = "store.tests.test_runner.ExampleTestRunner"
