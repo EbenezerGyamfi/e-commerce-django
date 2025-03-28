@@ -174,3 +174,16 @@ if DEBUG:
 MESSAGE_TAGS = {
     messages.ERROR: "danger",
 }
+# SMTP configuration
+
+if DEBUG:
+    # Use console backend for development
+    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+else:
+    # Use SMTP backend for production
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_PORT = 587
+    EMAIL_HOST_USER = 'ebenezer.rentmann@gmail.com'
+    EMAIL_HOST_PASSWORD = 'iezywqjhrzicxezk' 
+    EMAIL_USE_TLS = True
