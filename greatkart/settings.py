@@ -18,6 +18,10 @@ from django.conf.global_settings import AUTH_USER_MODEL, STATIC_ROOT, STATICFILE
 
 import environ
 
+
+from django.contrib.messages import constants as messages
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 
@@ -71,6 +75,8 @@ TEMPLATES = [
             os.path.join(BASE_DIR, 'templates'),
             os.path.join(BASE_DIR, 'store'),
             os.path.join(BASE_DIR, 'Cart'),
+            os.path.join(BASE_DIR, 'accounts'),
+            
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -164,3 +170,7 @@ if DEBUG:
 
 #configure your default runner to custom runner
 # TEST_RUNNER = "store.tests.test_runner.ExampleTestRunner"
+
+MESSAGE_TAGS = {
+    messages.ERROR: "danger",
+}

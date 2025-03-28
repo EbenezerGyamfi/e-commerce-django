@@ -19,11 +19,11 @@ from django.contrib import admin
 from django.urls import include, path
 
 from greatkart import views
-import store.urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.home, name='home'),
-    path('store/', include(store.urls)),
+    path('store/', include('store.urls')),
     path('cart/', include('Cart.urls')),
+    path('accounts/', include('accounts.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
