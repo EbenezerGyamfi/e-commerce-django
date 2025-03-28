@@ -52,7 +52,7 @@
                                 <small class="title text-muted">Welcome {{user.first_name}}!</small>
                                 <div> 
                                     <a href="{% url 'logout' %}">logout</a> <span class="dark-transp"> | </span>
-                                    <a href="#">Dashboard</a> <span class="dark-transp"> </span>
+                                    <a href="{% url 'dashboard' %}">Dashboard</a> <span class="dark-transp"> </span>
                                 </div>
                             </div>
                         {% endif %}
