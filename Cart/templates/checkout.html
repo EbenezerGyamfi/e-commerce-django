@@ -3,7 +3,7 @@
 <section class="section-content padding-y bg">
   <div class="container">
     <div class="row">
-      <div class="col-lg-9">
+      <div class="col-lg-6">
         <div class="card">
           <table class="table table-borderless table-shopping-cart">
             <thead class="text-muted">
@@ -15,7 +15,7 @@
               </tr>
             </thead>
             <tbody>
-              {% if cart_items %} {% for cart_item in cart_items %}
+              {% for cart_item  in  cart_items %}
               <tr>
                 <td>
                   <figure class="itemside align-items-center">
@@ -45,47 +45,8 @@
                 <td>
                   <div class="col">
                     <div class="input-group input-spinner">
-                      <div class="input-group-prepend">
-                        <form
-                          action="{% url 'remove_cart' cart_item.product.id %}"
-                          method="POST"
-                        >
-                          {% csrf_token %} 
-                          {% for item in cart_item.variations.all %}
-                          <input
-                            type="hidden"
-                            name="{{ item.variation_category|lower }}"
-                            value="{{ item.variation_value|lower }}"
-                          />
-                          {% endfor %}
-                          <button class="btn btn-light" type="submit">
-                            <i class="fa fa-minus"></i>
-                          </button>
-                        </form>
-                      </div>
-                      <input
-                        type="text"
-                        class="form-control"
-                        value="{{cart_item.quantity}}"
-                        readonly
-                      />
                       <div class="input-group-append">
-                        <form
-                          action="{% url 'add_cart' cart_item.product.id %}"
-                          method="POST"
-                        >
-                          {% csrf_token %} 
-                          {% for item in cart_item.variations.all %}
-                          <input
-                            type="hidden"
-                            name="{{ item.variation_category|lower }}"
-                            value="{{ item.variation_value|lower }}"
-                          />
-                          {% endfor %}
-                          <button class="btn btn-light" type="submit">
-                            <i class="fa fa-plus"></i>
-                          </button>
-                        </form>
+                        <label>{{cart_item.quantity}}</label>
                       </div>
                     </div>
                   </div>
@@ -102,7 +63,7 @@
                 </td>
                 <td class="text-right">
                   <form
-                    action="{% url 'delete_cart_item' cart_item.product.id %}"
+                    action=""
                     method="POST"
                   >
                     {% csrf_token %} 
@@ -117,46 +78,102 @@
                   </form>
                 </td>
               </tr>
-              {% endfor %} 
-              {% else %}
-              <tr>
-                <td colspan="4" class="text-center">
-                  <h4>Your Cart is Empty</h4>
-                  <a href="{% url 'store' %}" class="btn btn-primary"
-                    >Continue Shopping</a
-                  >
-                </td>
-              </tr>
-              {% endif %}
+              
+            
+            
             </tbody>
+            {% endfor %}
           </table>
         </div>
       </div>
 
-      <div class="col-lg-3">
+      <div class="col-lg-6">
         <div class="card">
           <div class="card-body">
-            <dl class="dlist-align">
-              <dt>Total price:</dt>
-              <dd class="text-right">${{total|floatformat:2}}</dd>
-            </dl>
-            <dl class="dlist-align">
-              <dt>Tax:</dt>
-              <dd class="text-right">${{tax|floatformat:2}}</dd>
-            </dl>
-            <dl class="dlist-align">
-              <dt>Grand Total:</dt>
-              <dd class="text-right text-dark b">
-                <strong>${{grand_total|floatformat:2}}</strong>
-              </dd>
-            </dl>
+            {% comment %} shipping details forms  {% endcomment %}
+            <h3 class="h5 text-muted mb-3">Shipping Details</h3>
+            <form>
+              <!-- shipping details fields -->
+               <!-- shipping fields -->
+              <div class="form-group">
+                <label for="shipping-name">Full Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="shipping-name"
+                  placeholder="John Doe"
+                  required
+                  name="shipping_name"
+                />
+              </div>
+
+               <div class="form-group">
+                <label for="shipping-country">Country</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id=""
+                  required
+                  name="country"
+                />
+               </div>
+
+               <div class="form-group">
+                <label for="shipping-location">Location</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="shipping-location"
+                  placeholder="New York, NY"
+                  required
+                  name="shipping_location"
+                />
+               </div>
+              
+                <div class="form-group">
+                  <label for="shipping-email">Email</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="shipping-email"
+                    placeholder="john.doe@example.com"
+                    required
+                    name="shipping_email"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="shipping-city">City</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="shipping-city"
+                    placeholder="New York"
+                    required
+                    name="shipping_city"
+                  />
+                </div>
+
+                <div class="form-group">
+                  <label for="shipping-order-note">Order Note</label>
+                  <textarea
+                    class="form-control"
+                    id="shipping-order-note"
+                    rows="3"
+                    name="shipping_order_note"
+                  />
+                </textarea>
+              </div>
+
+            </form>
+         
             <hr />
             <div class="text-center mb-3">
               <img src="{% static 'images/misc/payments.png' %}" height="26" />
             </div>
             {% if cart_items %}
             <a href="{% url 'checkout' %}" class="btn btn-primary btn-block"
-              >Proceed to Checkout</a
+              >Place Order</a
             >
             {% endif %}
             <a href="{% url 'store' %}" class="btn btn-light btn-block"
