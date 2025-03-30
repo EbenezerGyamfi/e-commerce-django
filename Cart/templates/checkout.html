@@ -92,7 +92,8 @@
           <div class="card-body">
             {% comment %} shipping details forms  {% endcomment %}
             <h3 class="h5 text-muted mb-3">Shipping Details</h3>
-            <form>
+            <form method="POST" action="">
+              {% csrf_token %}
               <!-- shipping details fields -->
                <!-- shipping fields -->
               <div class="form-group">
@@ -165,20 +166,21 @@
                 </textarea>
               </div>
 
-            </form>
+         
          
             <hr />
             <div class="text-center mb-3">
               <img src="{% static 'images/misc/payments.png' %}" height="26" />
             </div>
             {% if cart_items %}
-            <a href="{% url 'checkout' %}" class="btn btn-primary btn-block"
-              >Place Order</a
+            <button type="submit" class="btn btn-primary btn-block"
+              >Place Order</button
             >
             {% endif %}
             <a href="{% url 'store' %}" class="btn btn-light btn-block"
               >Continue Shopping</a
             >
+          </form>
           </div>
         </div>
       </div>

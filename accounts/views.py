@@ -9,8 +9,10 @@ from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
+from Cart.models import Cart, CartItem
 from accounts.forms import RegistrationForm
 from accounts.models import Account
+from Cart.views import cart_id
 
 
 
@@ -61,6 +63,22 @@ def login(request):
         user = auth.authenticate(email=email, password=password)
         
         if user is not None:
+            try:
+                print('try block')
+                cart = Cart.objects.get(cart_id=cart_id(request))
+                cart_items_exists = CartItem.objects.filter(cart=cart).exists()
+                print(cart_items_exists)
+                if cart_items_exists:
+                    cart_item = CartItem.objects.filter(cart=cart)
+                    
+                    for item in cart_item:
+                        item.user = user
+                        item.save()
+                    
+                    
+            except:
+                print('except block')
+                pass
             auth.login(request, user)
             messages.success(request, 'Logged in successfully.')
             return redirect('dashboard')
