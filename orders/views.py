@@ -1,10 +1,11 @@
 import datetime
+import json
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from Cart.models import CartItem
 from orders.forms import OrderForm
-from orders.models import Order
+from orders.models import Order, Payment
 
 def place_order(request, total=0, quantity=0,):
     current_user = request.user
@@ -52,9 +53,35 @@ def place_order(request, total=0, quantity=0,):
             order_number = current_date + str(data.id)
             data.order_number = order_number
             data.save()
-
+            
+            order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
+            context = {
+                'order': order,
+                'cart_items': cart_items,
+                'total': total,
+                'quantity': quantity,
+                'grand_total': grand_total,
+                'tax': tax,
+            }
          
-            return redirect('checkout')
+            return render(request=request, template_name='payment.html', context=context)
     else:
         return redirect('checkout')
 
+def payments(request):
+    body = json.loads(request.body)
+    order = Order.objects.get(user=request.user, is_ordered=False, order_number=body['orderID'])
+    # store all transaction details inside paymet
+    data = Payment(
+        user=request.user,
+        payment_id=body['transID'],
+        payment_method=body['payment_method'],
+        amount_paid=order.order_total,
+        status=body['status'],
+    )
+    data.save()
+    order.payment = data
+    order.is_ordered = True
+    order.save()
+    
+    return render(request=request, template_name='payment.html')
