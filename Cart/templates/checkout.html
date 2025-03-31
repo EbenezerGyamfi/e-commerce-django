@@ -63,7 +63,7 @@
                 </td>
                 <td class="text-right">
                   <form
-                    action=""
+                    action="{% url 'place_order' %}"
                     method="POST"
                   >
                     {% csrf_token %} 
@@ -92,21 +92,69 @@
           <div class="card-body">
             {% comment %} shipping details forms  {% endcomment %}
             <h3 class="h5 text-muted mb-3">Shipping Details</h3>
-            <form method="POST" action="">
+            <form method="POST" action="{% url 'place_order' %} ">
               {% csrf_token %}
               <!-- shipping details fields -->
                <!-- shipping fields -->
               <div class="form-group">
-                <label for="shipping-name">Full Name</label>
+                <label for="first-name">First Name</label>
                 <input
                   type="text"
                   class="form-control"
                   id="shipping-name"
                   placeholder="John Doe"
                   required
-                  name="shipping_name"
+                  name="first_name"
                 />
               </div>
+
+              <div class="form-group">
+                <label for="last-name">Last Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="shipping-name"
+                  placeholder="John Doe"
+                  required
+                  name="last_name"
+                />
+              </div>
+              <div class="form-group">
+                <label for="first-name">Phone</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="phone"
+                  placeholder="+233"
+                  required
+                  name="phone"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="first-name">Address 1</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="address_line_1"
+                  placeholder="Address"
+                  required
+                  name="address_line_1"
+                />
+              </div>
+
+              
+              <div class="form-group">
+                <label for="address_line_2">Address 2</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="address_line_2"
+                  placeholder="Address Optional"
+                  name="address_line_2"
+                />
+              </div>
+              
 
                <div class="form-group">
                 <label for="shipping-country">Country</label>
@@ -115,31 +163,32 @@
                   class="form-control"
                   id=""
                   required
+                  placeholder="Ghana"
                   name="country"
                 />
                </div>
 
                <div class="form-group">
-                <label for="shipping-location">Location</label>
+                <label for="state">State</label>
                 <input
                   type="text"
                   class="form-control"
-                  id="shipping-location"
+                  id="state"
                   placeholder="New York, NY"
                   required
-                  name="shipping_location"
+                  name="state"
                 />
                </div>
               
                 <div class="form-group">
-                  <label for="shipping-email">Email</label>
+                  <label for="city">City</label>
                   <input
-                    type="email"
+                    type="text"
                     class="form-control"
-                    id="shipping-email"
-                    placeholder="john.doe@example.com"
+                    id="city"
+                    placeholder="city"
                     required
-                    name="shipping_email"
+                    name="city"
                   />
                 </div>
 

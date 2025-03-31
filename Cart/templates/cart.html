@@ -15,7 +15,9 @@
               </tr>
             </thead>
             <tbody>
-              {% if cart_items %} {% for cart_item in cart_items %}
+              {% if cart_items %}
+              
+              {% for cart_item in cart_items %}
               <tr>
                 <td>
                   <figure class="itemside align-items-center">
@@ -34,9 +36,9 @@
                       </a>
                       <p class="text-muted small">
                         {% if cart_item.variations.all %} 
-                        {% for item in cart_item.variations.all %}
-                         {{ item.variation_category | capfirst }}: {{ item.variation_value | capfirst }}<br />
-                        {% endfor %} 
+                          {% for item in cart_item.variations.all %}
+                           {{ item.variation_category | capfirst }}: {{ item.variation_value | capfirst }}<br />
+                          {% endfor %} 
                         {% endif %}
                       </p>
                     </figcaption>
@@ -76,11 +78,11 @@
                         >
                           {% csrf_token %} 
                           {% for item in cart_item.variations.all %}
-                          <input
-                            type="hidden"
-                            name="{{ item.variation_category|lower }}"
-                            value="{{ item.variation_value|lower }}"
-                          />
+                            <input
+                              type="hidden"
+                              name="{{ item.variation_category|lower }}"
+                              value="{{ item.variation_value|lower }}"
+                            />
                           {% endfor %}
                           <button class="btn btn-light" type="submit">
                             <i class="fa fa-plus"></i>
@@ -118,6 +120,7 @@
                 </td>
               </tr>
               {% endfor %} 
+              
               {% else %}
               <tr>
                 <td colspan="4" class="text-center">
