@@ -8,6 +8,7 @@ from django.shortcuts import redirect, render
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
+import requests
 
 from Cart.models import Cart, CartItem
 from accounts.forms import RegistrationForm
@@ -81,7 +82,18 @@ def login(request):
                 pass
             auth.login(request, user)
             messages.success(request, 'Logged in successfully.')
-            return redirect('dashboard')
+            url = request.META.get('HTTP_REFERER')    # redirect users from where they came from
+            try:
+                query = requests.utils.urlparse(url).query
+                params = dict(x.split('=') for x in query.split('&'))
+                
+                if 'next' in params:
+                    nextPage = params['next']
+                    return redirect(nextPage)
+                
+            except Exception as error:
+                return redirect('dashboard')
+            
         else:
             messages.error(request, 'Invalid credentials.')
             return redirect('login')

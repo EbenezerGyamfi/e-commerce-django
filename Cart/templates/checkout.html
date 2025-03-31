@@ -3,7 +3,7 @@
 <section class="section-content padding-y bg">
   <div class="container">
     <div class="row">
-      <div class="col-lg-6">
+      <div class="col-lg-7">
         <div class="card">
           <table class="table table-borderless table-shopping-cart">
             <thead class="text-muted">
@@ -87,7 +87,7 @@
         </div>
       </div>
 
-      <div class="col-lg-6">
+      <div class="col-lg-5">
         <div class="card">
           <div class="card-body">
             {% comment %} shipping details forms  {% endcomment %}
@@ -172,11 +172,8 @@
             <div class="text-center mb-3">
               <img src="{% static 'images/misc/payments.png' %}" height="26" />
             </div>
-            {% if cart_items %}
             <button type="submit" class="btn btn-primary btn-block"
-              >Place Order</button
-            >
-            {% endif %}
+              >Place Order</button>
             <a href="{% url 'store' %}" class="btn btn-light btn-block"
               >Continue Shopping</a
             >

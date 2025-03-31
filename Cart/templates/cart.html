@@ -47,7 +47,7 @@
                     <div class="input-group input-spinner">
                       <div class="input-group-prepend">
                         <form
-                          action="{% url 'remove_cart' cart_item.product.id %}"
+                          action="{% url 'remove_cart' cart_item.product.id cart_item.id %}"
                           method="POST"
                         >
                           {% csrf_token %} 
