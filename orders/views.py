@@ -6,6 +6,7 @@ from django.shortcuts import redirect, render
 from Cart.models import CartItem
 from orders.forms import OrderForm
 from orders.models import Order, OrderProduct, Payment
+from store.models import Product
 
 def place_order(request, total=0, quantity=0,):
     current_user = request.user
@@ -104,5 +105,14 @@ def payments(request):
         data.variations.set(product_variation)
         
         data.save()
+    
+        # Reduce the quantity of the sold products
+        product = Product.objects.get(id=cart_item.product.id)
+        product.stock -= cart_item.quantity
+        product.save()
+        # Clear the cart of a user
+    
+    CartItem.objects.filter(user=request.user).delete()
+    # Send order received email to customer
     
     return render(request=request, template_name='payment.html')
