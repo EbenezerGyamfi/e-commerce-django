@@ -99,7 +99,7 @@ def payments(request):
         cart_items = CartItem.objects.get(id=cart_item.id)
         
         product_variation = cart_items.variations.all()
-        order_product = OrderProduct.objects.get(id=data.id)
+        data = OrderProduct.objects.get(id=data.id)
         
         data.variations.set(product_variation)
         
