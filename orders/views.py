@@ -1,7 +1,10 @@
 import datetime
 import json
-from django.http import HttpResponse
+from re import sub
+from django.core.mail import EmailMessage
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
+from django.template.loader import render_to_string
 
 from Cart.models import CartItem
 from orders.forms import OrderForm
@@ -114,5 +117,44 @@ def payments(request):
     
     CartItem.objects.filter(user=request.user).delete()
     # Send order received email to customer
+    mail_subject = 'Thank you for your order! '
+    message = render_to_string('order_recieved_email.html',{
+                'user': request.user,
+                'ordered_products': data,
+            })
+            
+    to_email = request.user.email
+    send_email = EmailMessage(mail_subject, message, to=[to_email])
+    send_email.send()
+    # Send order number and transaction id back to sendData method via JsonResponse
     
-    return render(request=request, template_name='payment.html')
+    data = {
+        'order_number': order.order_number,
+        'transaction_id': payment.payment_id,
+    }
+    return JsonResponse(data, content_type='application/json')
+
+def order_complete(request):
+    order_number = request.GET.get('order_number')
+    tranId = request.GET.get('payment_id')
+    
+    try:
+        order = Order.objects.get(order_number=order_number)
+        ordered_products = OrderProduct.objects.filter(order_id=order.id)
+        
+        payment = Payment.objects.get(payment_id=tranId)
+        
+        sub_total = 0
+        for product in ordered_products:
+            sub_total += product.product_price * product.quantity
+        
+        context = {
+            'order': order,
+            'ordered_products': ordered_products,
+            'tranID' : payment.payment_id,
+            'payment': payment,
+            'sub_total': sub_total
+        }
+        return render(request, 'order_complete.html', context=context)
+    except (Payment.DoesNotExist, Order.DoesNotExist):
+        return redirect('home')

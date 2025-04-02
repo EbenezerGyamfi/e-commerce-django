@@ -1,0 +1,17 @@
+
+{% autoescape off %}
+
+Hi {{user.first_name}},
+
+Your order has been received and is now being processed. Your order details are as follows:
+Order ID: {{ order.id }}
+Order Date: {{ order.created_at }}
+Order Total: {{ order.total }}
+Order Status: {{ order.status }}
+
+Thank you for joining our platform.
+
+if you think its not you, please  ignore this email
+Best regards,
+
+{% endautoescape %}
