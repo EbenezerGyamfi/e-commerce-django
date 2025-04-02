@@ -1,4 +1,3 @@
-
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
@@ -6,7 +5,7 @@ from django.shortcuts import get_object_or_404, render
 from Cart.models import CartItem
 from Cart.views import cart_id
 from category.models import Category
-from store.models import Product
+from store.models import Product, Variation
 
 # Create your views here.
 def store(request, category_slug=None):
@@ -40,11 +39,27 @@ def product_detail(request, category_slug, product_slug):
     try:
         single_product = Product.objects.get(category__slug=category_slug, slug=product_slug)
         in_cart = CartItem.objects.filter(cart__cart_id=cart_id(request), product=single_product).exists()
+        
+        # Get unique variations for the specific product
+        colors = Variation.objects.filter(
+            product=single_product, 
+            variation_category__iexact='color'
+        ).values('variation_value').distinct()
+        
+        sizes = Variation.objects.filter(
+            product=single_product, 
+            variation_category__iexact='size'
+        ).values('variation_value').distinct()
+        
     except Exception as error:
         raise error
     
-    context = {"product": single_product, 'in_cart': in_cart}
-    
+    context = {
+        "product": single_product, 
+        'in_cart': in_cart,
+        'colors': colors,
+        'sizes': sizes,
+    }
     
     return render(request=request, template_name="single_product.html", context=context)
     

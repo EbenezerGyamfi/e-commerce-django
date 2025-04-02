@@ -8,7 +8,7 @@
         <aside class="col-md-6">
           <article class="gallery-wrap">
             <div class="img-big-wrap">
-              <a href="#"><img static src="{{product.images.url}}" /></a>
+              <a href="#"><img src="{{product.images.url}}" /></a>
             </div>
             <!-- img-big-wrap.// -->
           </article>
@@ -27,18 +27,23 @@
               <p>{{product.product_description}}</p>
 
               <hr />
+              {% if colors %}
               <div class="row">
                 <div class="item-option-select">
                   <h6>Choose Color</h6>
                   <select name="color" class="form-control" required>
                     <option value="" disabled selected>Select Color</option>
-                    {% for variation in product.variation_set.colors %}
-                       <option value="{{ variation.variation_value | lower}}">{{variation.variation_value | capfirst}}</option>
+                    {% for color in colors %}
+                    <option value="{{ color.variation_value|lower }}">
+                      {{color.variation_value|capfirst}}
+                    </option>
                     {% endfor %}
                   </select>
                 </div>
               </div>
+              {% endif %}
               <!-- row.// -->
+              {% if sizes %}
               <div class="row">
                 <div class="item-option-select">
                   <h6>Select Size</h6>
@@ -46,24 +51,28 @@
                     class="btn-group btn-group-sm btn-group-toggle"
                     data-toggle="buttons"
                   >
-                  <select name="size" class="form-control" required>
-                    <option value="" disabled selected>Select Size</option>
-                    {% for variation in product.variation_set.sizes %}
-                       <option value="{{ variation.variation_value | lower }}">{{variation.variation_value | capfirst }}</option>
-                    {% endfor %}
-                  </select>
+                    <select name="size" class="form-control" required>
+                      <option value="" disabled selected>Select Size</option>
+                      {% for size in sizes %}
+                      <option value="{{ size.variation_value|lower }}">
+                        {{size.variation_value|capfirst}}
+                      </option>
+                      {% endfor %}
+                    </select>
                   </div>
                 </div>
               </div>
+              {% endif %}
               <!-- row.// -->
               <hr />
               {% if product.stock <= 0 %}
               <p class="text-danger">Out of stock</p>
-              {% else %} 
+              {% else %}
               <button type="submit" class="btn btn-primary">
                 <span class="text">Add to cart</span>
-                <i class="fas fa-shopping-cart"></i> </button
-              > {% endif %}
+                <i class="fas fa-shopping-cart"></i>
+              </button>
+              {% endif %}
             </article>
           </form>
           <!-- product-info-aside .// -->
@@ -91,7 +100,7 @@
             />
             <div class="text">
               <span class="date text-muted float-md-right">24.04.2020 </span>
-              <h6 class="mb-1">{{product.product_name}}n</h6>
+              <h6 class="mb-1">{{product.product_name}}</h6>
             </div>
           </div>
           <!-- icontext.// -->
