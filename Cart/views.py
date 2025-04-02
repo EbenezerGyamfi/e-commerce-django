@@ -117,53 +117,71 @@ def add_cart(request, product_id):
     return redirect('cart')
 
 def remove_cart(request, product_id, cart_item_id):
-   
-    product = get_object_or_404(Product,id=product_id)
+    product = get_object_or_404(Product, id=product_id)
     try:
         if request.user.is_authenticated:
+            # Retrieve the cart item for authenticated users
             cart_item = CartItem.objects.get(product=product, user=request.user, id=cart_item_id)
         else:
+            # Retrieve the cart item for unauthenticated users (session-based cart)
             cart = Cart.objects.get(cart_id=cart_id(request))
-            cart_item = CartItem.objects.get(product=product, cart=cart, id=cart_item_id)   
-        if(cart_item.quantity > 1):
+            cart_item = CartItem.objects.get(product=product, cart=cart, id=cart_item_id)
+
+        # Decrement the quantity or delete the cart item
+        if cart_item.quantity > 1:
             cart_item.quantity -= 1
             cart_item.save()
         else:
             cart_item.delete()
-    except Exception as error:
-        pass
-        
+    except CartItem.DoesNotExist:
+        # Log the error for debugging
+        print(f"CartItem with id {cart_item_id} does not exist.")
+    except Cart.DoesNotExist:
+        # Log the error for debugging
+        print(f"Cart with id {cart_id(request)} does not exist.")
+    except Exception as e:
+        # Log any other exceptions
+        print(f"Error in remove_cart: {str(e)}")
+
     return redirect('cart')
 
-
 def delete_cart_item(request, product_id):
-    cart = Cart.objects.get(cart_id=cart_id(request))
     product = get_object_or_404(Product, id=product_id)
     
-    # Get all cart items for this product
-    cart_items = CartItem.objects.filter(product=product, cart=cart)
-    
-    # If there's only one cart item, delete it
-    if cart_items.count() == 1:
-        cart_items.first().delete()
-    else:
-        # If there are multiple cart items, we need to handle variations
-        products_variation = []
-        if request.method == 'POST':
-            for item in request.POST:
-                key = item
-                value = request.POST[key]
-                try:
-                    variation = Variation.objects.get(product=product, variation_category__iexact=key, variation_value__iexact=value)
-                    products_variation.append(variation)
-                except:
-                    pass
+    try:
+        if request.user.is_authenticated:
+            # For authenticated users, get cart items by user
+            cart_items = CartItem.objects.filter(product=product, user=request.user)
+        else:
+            # For non-authenticated users, get cart items by session cart
+            cart = Cart.objects.get(cart_id=cart_id(request))
+            cart_items = CartItem.objects.filter(product=product, cart=cart)
         
-        # Find and delete the cart item with matching variations
-        for cart_item in cart_items:
-            if set(cart_item.variations.all()) == set(products_variation):
-                cart_item.delete()
-                break
+        # If there's only one cart item, delete it
+        if cart_items.count() == 1:
+            cart_items.first().delete()
+        else:
+            # If there are multiple cart items, we need to handle variations
+            products_variation = []
+            if request.method == 'POST':
+                for item in request.POST:
+                    key = item
+                    value = request.POST[key]
+                    try:
+                        variation = Variation.objects.get(product=product, variation_category__iexact=key, variation_value__iexact=value)
+                        products_variation.append(variation)
+                    except:
+                        pass
+            
+            # Find and delete the cart item with matching variations
+            for cart_item in cart_items:
+                if set(cart_item.variations.all()) == set(products_variation):
+                    cart_item.delete()
+                    break
+    except Cart.DoesNotExist:
+        print(f"Cart with id {cart_id(request)} does not exist.")
+    except Exception as e:
+        print(f"Error in delete_cart_item: {str(e)}")
     
     return redirect('cart')
 
