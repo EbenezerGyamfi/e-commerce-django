@@ -32,6 +32,8 @@ def register(request):
             
             user = Account.objects.create_user(first_name=first_name, last_name=last_name, email=email, username=username, password=password)
             user.phone_number = phone_number
+            
+            
             #user activation using email verification
             current_site = get_current_site(request=request)
             mail_subject = 'Please activate your account'
@@ -46,9 +48,11 @@ def register(request):
             send_email = EmailMessage(mail_subject, message, to=[to_email])
             send_email.send()
             return redirect('/accounts/login/?command=verification&email='+email)
-           
+        else:
+            print('there is an error')  
             
     else:
+       
         form = RegistrationForm()
         
     context = {'form': form}
@@ -65,7 +69,6 @@ def login(request):
         
         if user is not None:
             try:
-                print('try block')
                 cart = Cart.objects.get(cart_id=cart_id(request))
                 cart_items_exists = CartItem.objects.filter(cart=cart).exists()
                 print(cart_items_exists)
@@ -75,14 +78,12 @@ def login(request):
                     for item in cart_item:
                         item.user = user
                         item.save()
-                    
-                    
             except:
-                print('except block')
                 pass
             auth.login(request, user)
             messages.success(request, 'Logged in successfully.')
             url = request.META.get('HTTP_REFERER')    # redirect users from where they came from
+            print(url)
             try:
                 query = requests.utils.urlparse(url).query
                 params = dict(x.split('=') for x in query.split('&'))
