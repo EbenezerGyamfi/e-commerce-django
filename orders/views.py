@@ -5,7 +5,7 @@ from django.shortcuts import redirect, render
 
 from Cart.models import CartItem
 from orders.forms import OrderForm
-from orders.models import Order, Payment
+from orders.models import Order, OrderProduct, Payment
 
 def place_order(request, total=0, quantity=0,):
     current_user = request.user
@@ -49,39 +49,51 @@ def place_order(request, total=0, quantity=0,):
             dt = int(datetime.date.today().strftime('%d'))
             mt = int(datetime.date.today().strftime('%m'))
             d = datetime.date(yr,mt,dt)
-            current_date = d.strftime("%Y%m%d")
+            current_date = d.strftime("%Y%m%d") #20210305
             order_number = current_date + str(data.id)
             data.order_number = order_number
             data.save()
-            
+
             order = Order.objects.get(user=current_user, is_ordered=False, order_number=order_number)
             context = {
                 'order': order,
                 'cart_items': cart_items,
                 'total': total,
-                'quantity': quantity,
-                'grand_total': grand_total,
                 'tax': tax,
+                'grand_total': grand_total,
             }
-         
-            return render(request=request, template_name='payment.html', context=context)
+            return render(request, 'payment.html', context)
     else:
         return redirect('checkout')
-
 def payments(request):
     body = json.loads(request.body)
     order = Order.objects.get(user=request.user, is_ordered=False, order_number=body['orderID'])
     # store all transaction details inside paymet
-    data = Payment(
+    payment = Payment(
         user=request.user,
         payment_id=body['transID'],
         payment_method=body['payment_method'],
         amount_paid=order.order_total,
         status=body['status'],
     )
-    data.save()
-    order.payment = data
+    payment.save()
+    order.payment = payment
     order.is_ordered = True
     order.save()
+    
+    # move cart items to order Product table and reduct quantity of the sold products, clear the cart and send order received email to customer, 
+    
+    cart_items = CartItem.objects.filter(user=request.user)
+    
+    for cart_item in cart_items:
+        data = OrderProduct()
+        data.order_id = order.id
+        data.product_id = cart_item.product.id
+        data.payment = payment
+        data.user_id = request.user.id
+        data.quantity = cart_item.quantity
+        data.product_price = cart_item.product.price
+        data.ordered = True
+        data.save()
     
     return render(request=request, template_name='payment.html')

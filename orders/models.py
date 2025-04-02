@@ -1,4 +1,6 @@
 from django.db import models
+from django.core.validators import MinValueValidator, RegexValidator
+from django.utils.translation import gettext_lazy as _
 from accounts.models import Account
 from store.models import Product, Variation
 
@@ -45,7 +47,6 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
     def full_name(self):
         return f'{self.first_name} {self.last_name}'
 
@@ -67,5 +68,12 @@ class OrderProduct(models.Model):
     ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.product.product_name} - {self.quantity}"
+
+    @property
+    def total_price(self):
+        return self.product_price * self.quantity
 
 
