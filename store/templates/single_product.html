@@ -33,9 +33,9 @@
                   <h6>Choose Color</h6>
                   <select name="color" class="form-control" required>
                     <option value="" disabled selected>Select Color</option>
-                    {% for color in colors %}
-                    <option value="{{ color.variation_value|lower }}">
-                      {{color.variation_value|capfirst}}
+                    {% for variation in colors %}
+                    <option value="{{ variation.variation_value|lower }}">
+                      {{variation.variation_value|capfirst}}
                     </option>
                     {% endfor %}
                   </select>
@@ -53,9 +53,9 @@
                   >
                     <select name="size" class="form-control" required>
                       <option value="" disabled selected>Select Size</option>
-                      {% for size in sizes %}
-                      <option value="{{ size.variation_value|lower }}">
-                        {{size.variation_value|capfirst}}
+                      {% for variation in sizes %}
+                      <option value="{{ variation.variation_value|lower }}">
+                        {{variation.variation_value|capfirst}}
                       </option>
                       {% endfor %}
                     </select>

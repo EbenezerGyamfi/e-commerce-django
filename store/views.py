@@ -40,16 +40,9 @@ def product_detail(request, category_slug, product_slug):
         single_product = Product.objects.get(category__slug=category_slug, slug=product_slug)
         in_cart = CartItem.objects.filter(cart__cart_id=cart_id(request), product=single_product).exists()
         
-        # Get unique variations for the specific product
-        colors = Variation.objects.filter(
-            product=single_product, 
-            variation_category__iexact='color'
-        ).values('variation_value').distinct()
-        
-        sizes = Variation.objects.filter(
-            product=single_product, 
-            variation_category__iexact='size'
-        ).values('variation_value').distinct()
+        # Get variations for the specific product
+        colors = Variation.objects.filter(product=single_product, variation_category__iexact='color')
+        sizes = Variation.objects.filter(product=single_product, variation_category__iexact='size')
         
     except Exception as error:
         raise error
