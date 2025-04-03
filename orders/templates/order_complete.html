@@ -88,14 +88,15 @@
                       {% for item in ordered_products %}
                       <tr>
                         <td>
-                          {{item.product.product_name}} {% if
-                          cart_item.variations.all %}
+                          {{item.product.product_name}}
+                           {% if cart_item.variations.all %}
                           <p class="text-muted small">
-                            {% if item.variations.all %} {% for i in
-                            item.variations.all %} {{ i.variation_category |
-                            capfirst }} : {{ i.variation_value | capfirst }}
-                            <br />
-                            {% endfor %} {% endif %}
+                            {% if item.variations.all %} 
+                              {% for i in item.variations.all %} 
+                              {{ i.variation_category | capfirst }} : {{ i.variation_value | capfirst }}
+                              <br />
+                              {% endfor %} 
+                            {% endif %}
                           </p>
                           {% endif %}
                         </td>
