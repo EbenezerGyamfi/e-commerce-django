@@ -2,12 +2,13 @@ from django.contrib import admin
 
 from Cart.models import Cart, CartItem
 
+
 class CartAdmin(admin.ModelAdmin):
-    list_display = ('cart_id', 'date_added')
-    
+    list_display = ("cart_id", "date_added")
+
+
 class CartItemAdmin(admin.ModelAdmin):
-    list_display = ('product', 'cart', 'quantity', 'is_active')
-    
+    list_display = ("product", "cart", "quantity", "is_active")
 
 
 # Register your models here.

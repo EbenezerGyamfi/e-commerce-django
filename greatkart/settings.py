@@ -30,11 +30,10 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'inug5y0pzt#+hu5yhu*a%0sk!f@m-_bef5=s=+9(%7r^+fop7@'
+SECRET_KEY = "inug5y0pzt#+hu5yhu*a%0sk!f@m-_bef5=s=+9(%7r^+fop7@"
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 
 
 ALLOWED_HOSTS = []
@@ -43,69 +42,67 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'category',
-    'accounts',
-    'store',
-    'Cart',
-    'orders',
+    "django.contrib.admin",
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
+    "django.contrib.sessions",
+    "django.contrib.messages",
+    "django.contrib.staticfiles",
+    "category",
+    "accounts",
+    "store",
+    "Cart",
+    "orders",
 ]
 
 MIDDLEWARE = [
-    'django.middleware.security.SecurityMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
-    'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
+    "django.middleware.security.SecurityMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.auth.middleware.AuthenticationMiddleware",
+    "django.contrib.messages.middleware.MessageMiddleware",
+    "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-ROOT_URLCONF = 'greatkart.urls'
+ROOT_URLCONF = "greatkart.urls"
 
 TEMPLATES = [
     {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-         'DIRS': [
-            os.path.join(BASE_DIR, 'templates'),
-            os.path.join(BASE_DIR, 'store'),
-            os.path.join(BASE_DIR, 'Cart'),
-            os.path.join(BASE_DIR, 'accounts'),
-            os.path.join(BASE_DIR, 'orders'),
-            
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [
+            os.path.join(BASE_DIR, "templates"),
+            os.path.join(BASE_DIR, "store"),
+            os.path.join(BASE_DIR, "Cart"),
+            os.path.join(BASE_DIR, "accounts"),
+            os.path.join(BASE_DIR, "orders"),
         ],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'context_processors': [
-                'django.template.context_processors.debug',
-                'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
-                'django.contrib.messages.context_processors.messages',
-                'category.context_processor.menu_links',
-                'Cart.context_processor.counter',
+        "APP_DIRS": True,
+        "OPTIONS": {
+            "context_processors": [
+                "django.template.context_processors.debug",
+                "django.template.context_processors.request",
+                "django.contrib.auth.context_processors.auth",
+                "django.contrib.messages.context_processors.messages",
+                "category.context_processor.menu_links",
+                "Cart.context_processor.counter",
             ],
         },
     },
 ]
 
-WSGI_APPLICATION = 'greatkart.wsgi.application'
+WSGI_APPLICATION = "greatkart.wsgi.application"
 
-AUTH_USER_MODEL = 'accounts.Account'
+AUTH_USER_MODEL = "accounts.Account"
 
 
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
     }
 }
 
@@ -115,16 +112,16 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
 
@@ -132,9 +129,9 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = "en-us"
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = "UTC"
 
 USE_I18N = True
 
@@ -146,19 +143,19 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR /'static'
-STATICFILES_DIRS=[
-    'greatkart/static',
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "static"
+STATICFILES_DIRS = [
+    "greatkart/static",
 ]
 
-#run python3 manage.py collectstatic. for the project to have access to static files
+# run python3 manage.py collectstatic. for the project to have access to static files
 
-#media files config
-MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# media files config
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
-  # <-- Updated!
+# <-- Updated!
 
 env = environ.Env(  # <-- Updated!
     # set casting, default value
@@ -166,11 +163,10 @@ env = environ.Env(  # <-- Updated!
 )
 
 
-
 if DEBUG:
-    INTERNAL_IPS = ["127.0.0.1"] 
+    INTERNAL_IPS = ["127.0.0.1"]
 
-#configure your default runner to custom runner
+# configure your default runner to custom runner
 # TEST_RUNNER = "store.tests.test_runner.ExampleTestRunner"
 
 MESSAGE_TAGS = {
@@ -180,12 +176,12 @@ MESSAGE_TAGS = {
 
 if DEBUG:
     # Use console backend for development
-    EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+    EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 else:
     # Use SMTP backend for production
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = 'smtp.gmail.com'
+    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+    EMAIL_HOST = "smtp.gmail.com"
     EMAIL_PORT = 587
-    EMAIL_HOST_USER = 'ebenezer.rentmann@gmail.com'
-    EMAIL_HOST_PASSWORD = 'iezywqjhrzicxezk' 
+    EMAIL_HOST_USER = "ebenezer.rentmann@gmail.com"
+    EMAIL_HOST_PASSWORD = "iezywqjhrzicxezk"
     EMAIL_USE_TLS = True

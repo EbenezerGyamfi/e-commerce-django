@@ -6,26 +6,32 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('store', '0005_alter_product_product_name'),
+        ("store", "0005_alter_product_product_name"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='product',
-            name='model',
+            model_name="product",
+            name="model",
         ),
         migrations.RemoveField(
-            model_name='product',
-            name='modified_date',
+            model_name="product",
+            name="modified_date",
         ),
         migrations.AlterField(
-            model_name='product',
-            name='product_description',
+            model_name="product",
+            name="product_description",
             field=models.TextField(blank=True, null=True),
         ),
         migrations.AlterField(
-            model_name='product',
-            name='product_name',
-            field=models.CharField(default='testing product', help_text='this is the product name', max_length=200, unique=True, verbose_name='product first name'),
+            model_name="product",
+            name="product_name",
+            field=models.CharField(
+                default="testing product",
+                help_text="this is the product name",
+                max_length=200,
+                unique=True,
+                verbose_name="product first name",
+            ),
         ),
     ]
