@@ -4,16 +4,17 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import EmailMessage
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 import requests
 
 from Cart.models import Cart, CartItem
-from accounts.forms import RegistrationForm
-from accounts.models import Account
+from accounts.forms import RegistrationForm, UserForm, UserProfileForm
+from accounts.models import Account, UserProfile
 from Cart.views import cart_id
+from orders.models import Order
 
 
 def register(request):
@@ -199,3 +200,40 @@ def resetPassword(request):
             messages.error(request, "Passwords do not match")
             return redirect("resetPassword")
     return render(request, "reset-password.html")
+
+
+def my_orders(request):
+    orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-created_at') # the hyphen will gile result in descending order
+    orders_count = orders.count()
+    context = {
+        "orders": orders,
+        "orders_count": orders_count,
+    }
+    return render(request, "my_orders.html", context=context)
+
+
+def edit_profile(request):
+    user_profile = get_object_or_404(UserProfile, user= request.user)
+    if request.method == "POST":
+        
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = UserProfileForm(
+            request.POST, request.FILES, instance=user_profile
+        )
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            messages.success(request, "Profile updated successfully")
+            return redirect("edit_profile")
+        else:
+            messages.error(request, "Error updating profile")
+        
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = UserProfileForm(instance=user_profile)
+    context = {
+        "user_form": user_form,
+        "profile_form": profile_form,
+        "user_profile": user_profile,
+    }
+    return render(request, "edit_profile.html", context=context)
