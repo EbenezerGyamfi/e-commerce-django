@@ -14,7 +14,7 @@ from Cart.models import Cart, CartItem
 from accounts.forms import RegistrationForm, UserForm, UserProfileForm
 from accounts.models import Account, UserProfile
 from Cart.views import cart_id
-from orders.models import Order
+from orders.models import Order, OrderProduct
 
 
 def register(request):
@@ -274,3 +274,22 @@ def change_password(request):
             return redirect("change_password")
 
     return render(request, "change-password.html")
+
+
+def order_detail(request, order_id):
+    order_detail = OrderProduct.objects.filter(order__order_number=order_id)
+    order = Order.objects.get(order_number=order_id)
+    
+    subtotal = 0
+    for order_product in order_detail:
+        subtotal += order_product.product_price * order_product.quantity
+    # tax = (subtotal * 2) / 100
+    
+    context = {
+        "order_detail": order_detail,
+        "order": order,
+        'sub_total': subtotal,
+        # 'tax': tax,
+        # 'total': subtotal + tax,
+    }
+    return render(request, "order_detail.html", context=context)
