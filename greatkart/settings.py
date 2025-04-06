@@ -20,7 +20,7 @@ import environ
 
 
 from django.contrib.messages import constants as messages
-
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
@@ -30,10 +30,10 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "inug5y0pzt#+hu5yhu*a%0sk!f@m-_bef5=s=+9(%7r^+fop7@"
+SECRET_KEY =  config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', default=True, cast=bool)
 
 
 ALLOWED_HOSTS = []
@@ -178,10 +178,11 @@ if DEBUG:
     # Use console backend for development
     EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 else:
-    # Use SMTP backend for production
-    EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-    EMAIL_HOST = "smtp.gmail.com"
-    EMAIL_PORT = 587
-    EMAIL_HOST_USER = "ebenezer.rentmann@gmail.com"
-    EMAIL_HOST_PASSWORD = "iezywqjhrzicxezk"
-    EMAIL_USE_TLS = True
+    # Use SMTP backend for production,, fetch from .env
+    
+    EMAIL_BACKEND=config('EMAIL_BACKEND')
+    EMAIL_HOST = config('EMAIL_HOST')
+    EMAIL_PORT = config('EMAIL_PORT')
+    EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+    EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
