@@ -9,7 +9,7 @@
     </a>
     <a
       class="list-group-item {% if '/my_orders/' in request.path %}active{% endif %}"
-      href="#"
+      href="{% url 'my_orders' %}"
     >
       My Orders
     </a>
@@ -21,7 +21,7 @@
     </a>
     <a
       class="list-group-item {% if '/change_password/' in request.path %}active{% endif %}"
-      href="#"
+      href="{% url 'change_password' %}"
     >
       Change Password
     </a>

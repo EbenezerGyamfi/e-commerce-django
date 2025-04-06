@@ -24,23 +24,18 @@ class AccountAdmin(UserAdmin):
     filter_horizontal = ()
     list_filter = ()
     fieldsets = ()
-    
-    
+
+
 class UserProfileAdmin(admin.ModelAdmin):
     def thumbnail(self, obj):
         return format_html(
             '<img src="%s" style="width: 40px; height: 40px; border-radius: 50%%;" />'
             % (obj.profile_picture.url)
         )
+
     thumbnail.short_description = "Profile Picture"
-    
-    list_display = (
-        "user",
-        "city",
-        "state",
-        "thumbnail",
-        "country"
-    )
+
+    list_display = ("user", "city", "state", "thumbnail", "country")
 
 
 # Register your models here.

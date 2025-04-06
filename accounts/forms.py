@@ -79,24 +79,62 @@ class RegistrationForm(UserCreationForm):
         if Account.objects.filter(phone_number=phone_number).exists():
             raise forms.ValidationError("This phone number is already registered.")
         return phone_number
-    
+
+
 class UserForm(forms.ModelForm):
     class Meta:
         model = Account
-        fields = ('first_name', 'last_name', 'phone_number')
+        fields = ("first_name", "last_name", "phone_number")
 
     def __init__(self, *args, **kwargs):
         super(UserForm, self).__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
+            self.fields[field].widget.attrs["class"] = "form-control"
+
 
 class UserProfileForm(forms.ModelForm):
-    profile_picture = forms.ImageField(required=False, error_messages = {'invalid':("Image files only")}, widget=forms.FileInput)
+    profile_picture = forms.ImageField(
+        required=False,
+        error_messages={"invalid": ("Image files only")},
+        widget=forms.FileInput,
+    )
+
     class Meta:
         model = UserProfile
-        fields = ('address_line_1', 'address_line_2', 'city', 'state', 'country', 'profile_picture')
+        fields = (
+            "address_line_1",
+            "address_line_2",
+            "city",
+            "state",
+            "country",
+            "profile_picture",
+        )
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
         for field in self.fields:
-            self.fields[field].widget.attrs['class'] = 'form-control'
+            self.fields[field].widget.attrs["class"] = "form-control"
+
+
+class UserChangePasswordForm(forms.ModelForm):
+    old_password = forms.CharField(
+        label="Old Password",
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
+    )
+    new_password1 = forms.CharField(
+        label="New Password",
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
+    )
+    new_password2 = forms.CharField(
+        label="Confirm New Password",
+        widget=forms.PasswordInput(attrs={"class": "form-control"}),
+    )
+
+    class Meta:
+        model = Account
+        fields = ("old_password", "new_password1", "new_password2")
+
+    def __init__(self, *args, **kwargs):
+        super(UserChangePasswordForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs["class"] = "form-control"

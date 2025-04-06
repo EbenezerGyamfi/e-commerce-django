@@ -85,7 +85,7 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.first_name
-    
+
     # add full address property
     @property
     def full_address(self):

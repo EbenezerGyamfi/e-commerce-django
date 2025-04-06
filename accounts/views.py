@@ -26,6 +26,12 @@ def register(request):
             user.is_active = False
             user.save()
 
+            # Create user profile
+            user_profile = UserProfile()
+            user_profile.user_id = user
+            user_profile.profile_picture = "default/default-profile.png"
+            user_profile.save()
+
             # Send activation email
             current_site = get_current_site(request)
             mail_subject = "Please activate your account"
@@ -202,8 +208,11 @@ def resetPassword(request):
     return render(request, "reset-password.html")
 
 
+@login_required(login_url="login")
 def my_orders(request):
-    orders = Order.objects.filter(user=request.user, is_ordered=True).order_by('-created_at') # the hyphen will gile result in descending order
+    orders = Order.objects.filter(user=request.user, is_ordered=True).order_by(
+        "-created_at"
+    )  # the hyphen will gile result in descending order
     orders_count = orders.count()
     context = {
         "orders": orders,
@@ -212,10 +221,11 @@ def my_orders(request):
     return render(request, "my_orders.html", context=context)
 
 
+@login_required(login_url="login")
 def edit_profile(request):
-    user_profile = get_object_or_404(UserProfile, user= request.user)
+    user_profile = get_object_or_404(UserProfile, user=request.user)
     if request.method == "POST":
-        
+
         user_form = UserForm(request.POST, instance=request.user)
         profile_form = UserProfileForm(
             request.POST, request.FILES, instance=user_profile
@@ -227,7 +237,7 @@ def edit_profile(request):
             return redirect("edit_profile")
         else:
             messages.error(request, "Error updating profile")
-        
+
     else:
         user_form = UserForm(instance=request.user)
         profile_form = UserProfileForm(instance=user_profile)
@@ -237,3 +247,30 @@ def edit_profile(request):
         "user_profile": user_profile,
     }
     return render(request, "edit_profile.html", context=context)
+
+
+@login_required(login_url="login")
+def change_password(request):
+    if request.method == "POST":
+        current_password = request.POST["current_password"]
+        new_password = request.POST["new_password"]
+        confirm_new_password = request.POST["confirm_password"]
+
+        user = Account.objects.get(username__exact=request.user.username)
+
+        if user.check_password(current_password):
+            if new_password == confirm_new_password:
+                user.set_password(new_password)
+                user.save()
+
+                # auth.logout(request) # by default you will be logged out after changing password
+                messages.success(request, "Password changed successfully")
+                return redirect("change_password")
+            else:
+                messages.error(request, "New passwords do not match")
+                return redirect("change_password")
+        else:
+            messages.error(request, "Current password is incorrect")
+            return redirect("change_password")
+
+    return render(request, "change-password.html")
