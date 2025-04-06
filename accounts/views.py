@@ -134,7 +134,15 @@ def activate(request, uidb64, token):
 
 @login_required(login_url="login")
 def dashboard(request):
-    return render(request, "dashboard.html")
+    # count user orders 
+    orders = Order.objects.filter(user=request.user, is_ordered=True).count()
+    user_profile = UserProfile.objects.get(user=request.user)
+
+    context = {
+        "orders": orders,
+        "user_profile": user_profile
+    }
+    return render(request, "dashboard.html", context=context)
 
 
 def forgot_passowrd(request):
