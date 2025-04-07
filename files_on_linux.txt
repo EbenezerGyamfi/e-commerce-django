@@ -1,0 +1,27 @@
+Unix File systems
+What is a file?
+A container for storing, accessing and managing data.
+
+file examples and their types:
+1. ordinary file (-)
+2. Directories (d)
+3. Symbolic links (l)
+4. Character Devices (c)
+5. Block Devices  (b)
+6. Names pipe (p)
+7. sockets (s)
+
+
+to see the type of file use ls -l [folser / file]
+
+symblinks 
+its serves as a reference to another file or directory
+its serves as a shortcut to another destination
+symblink is not related to only directories but files and removable media  as well
+
+how to create symblink
+ln -S 
+ln is used to make links  betn files
+-S is what we use to create the sybmlink
+
+example ln -s  target link
